@@ -14,6 +14,11 @@ val keystoreProps = Properties().apply {
 }
 
 android {
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
+
     namespace = "com.simoesctt.line16"
     compileSdk = 35
     defaultConfig {
