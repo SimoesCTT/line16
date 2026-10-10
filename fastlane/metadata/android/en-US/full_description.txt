@@ -1,0 +1,21 @@
+Line 16 computes US federal income tax and self-employment tax for the 2025 tax year. You type in a dozen numbers off your W-2 and 1099s, and it tells you exactly what goes on each line of your 1040.
+
+<b>What it does</b>
+<ul>
+<li>Computes federal income tax and self-employment tax for tax year 2025</li>
+<li>Handles W-2 income, Schedule C (self-employment), business mileage, and simplified home office</li>
+<li>Supports Single, Married Filing Jointly, and Head of Household filing statuses</li>
+<li>Includes Dependents and the Child Tax Credit</li>
+<li>Shows a line-by-line 1040 breakdown in plain English</li>
+<li>Fills the real IRS Form 1040 PDF</li>
+</ul>
+
+<b>Privacy</b>
+<ul>
+<li>All data stays on your device</li>
+<li>No accounts, no tracking, no analytics</li>
+<li>One optional HTTPS call to irs.gov to update the IRS form, with SHA-256 pinning</li>
+</ul>
+
+<b>Disclaimer</b>
+Line 16 is software, not a CPA. It does not file your return and does not give tax advice. You are responsible for what you file.
