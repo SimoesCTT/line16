@@ -29,6 +29,7 @@ import io.github.yourhandle.line16.ui.screens.filingstatus.FilingStatusScreen
 import io.github.yourhandle.line16.ui.screens.home.HomeScreen
 import io.github.yourhandle.line16.ui.screens.schedulec.ScheduleCScreen
 import io.github.yourhandle.line16.ui.screens.summary.SummaryScreen
+import io.github.yourhandle.line16.ui.screens.taxpayer.TaxpayerScreen
 import io.github.yourhandle.line16.ui.screens.w2.W2Screen
 import io.github.yourhandle.line16.ui.theme.Line16Theme
 
@@ -54,6 +55,7 @@ private fun Line16Root() {
 
     val title = when (route) {
         Routes.HOME -> "Line 16"
+        Routes.TAXPAYER -> "Your information"
         Routes.FILING_STATUS -> "Filing status"
         Routes.W2 -> "W-2 income"
         Routes.SCHEDULE_C -> "Schedule C"
@@ -85,6 +87,7 @@ private fun Line16Root() {
             composable(Routes.HOME) {
                 HomeScreen(vm) { dest -> nav.navigate(dest) }
             }
+            composable(Routes.TAXPAYER) { TaxpayerScreen(vm) }
             composable(Routes.FILING_STATUS) { FilingStatusScreen(vm) }
             composable(Routes.W2) { W2Screen(vm) }
             composable(Routes.SCHEDULE_C) { ScheduleCScreen(vm) }

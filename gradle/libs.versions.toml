@@ -9,6 +9,7 @@ composeBom = "2024.09.03"
 room = "2.6.1"
 navigationCompose = "2.8.2"
 coroutines = "1.9.0"
+pdfboxAndroid = "2.0.27.0"
 junit = "4.13.2"
 truth = "1.4.4"
 
@@ -36,3 +37,4 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+

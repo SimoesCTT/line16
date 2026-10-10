@@ -2,6 +2,7 @@ package io.github.yourhandle.line16.domain.model
 
 data class TaxReturn(
     val status: FilingStatus = FilingStatus.SINGLE,
+    val taxpayer: TaxpayerInfo = TaxpayerInfo(),
     val w2s: List<W2> = emptyList(),
     val scheduleC: ScheduleC = ScheduleC(),
     val businessMiles: Int = 0,

@@ -36,6 +36,8 @@ class ReturnViewModel(app: Application) : AndroidViewModel(app) {
 
     fun setStatus(s: FilingStatus) = update { it.copy(status = s) }
 
+    fun setTaxpayer(t: io.github.yourhandle.line16.domain.model.TaxpayerInfo) = update { it.copy(taxpayer = t) }
+
     fun setW2(index: Int, w: W2) = update { r ->
         val list = r.w2s.toMutableList()
         if (index < list.size) list[index] = w else list.add(w)

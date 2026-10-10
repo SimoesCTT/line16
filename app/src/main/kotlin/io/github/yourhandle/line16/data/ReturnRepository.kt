@@ -3,6 +3,7 @@ package io.github.yourhandle.line16.data
 import io.github.yourhandle.line16.domain.model.FilingStatus
 import io.github.yourhandle.line16.domain.model.ScheduleC
 import io.github.yourhandle.line16.domain.model.TaxReturn
+import io.github.yourhandle.line16.domain.model.TaxpayerInfo
 import io.github.yourhandle.line16.domain.model.W2
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -22,6 +23,21 @@ class ReturnRepository(private val dao: ReturnDao) {
     private fun TaxReturn.toEntity(year: Int) = ReturnEntity(
         year = year,
         status = status.name,
+        taxpayerJson = JSONObject().apply {
+            put("firstName", taxpayer.firstName)
+            put("middleInitial", taxpayer.middleInitial)
+            put("lastName", taxpayer.lastName)
+            put("ssn", taxpayer.ssn)
+            put("spouseFirstName", taxpayer.spouseFirstName)
+            put("spouseMiddleInitial", taxpayer.spouseMiddleInitial)
+            put("spouseLastName", taxpayer.spouseLastName)
+            put("spouseSsn", taxpayer.spouseSsn)
+            put("address", taxpayer.address)
+            put("apt", taxpayer.apt)
+            put("city", taxpayer.city)
+            put("state", taxpayer.state)
+            put("zip", taxpayer.zip)
+        }.toString(),
         w2Json = JSONArray().apply {
             w2s.forEach { w ->
                 put(JSONObject().apply {
@@ -56,6 +72,22 @@ class ReturnRepository(private val dao: ReturnDao) {
     )
 
     private fun ReturnEntity.toDomain(): TaxReturn {
+        val t = JSONObject(taxpayerJson)
+        val tp = TaxpayerInfo(
+            firstName = t.optString("firstName"),
+            middleInitial = t.optString("middleInitial"),
+            lastName = t.optString("lastName"),
+            ssn = t.optString("ssn"),
+            spouseFirstName = t.optString("spouseFirstName"),
+            spouseMiddleInitial = t.optString("spouseMiddleInitial"),
+            spouseLastName = t.optString("spouseLastName"),
+            spouseSsn = t.optString("spouseSsn"),
+            address = t.optString("address"),
+            apt = t.optString("apt"),
+            city = t.optString("city"),
+            state = t.optString("state"),
+            zip = t.optString("zip"),
+        )
         val w2Arr = JSONArray(w2Json)
         val w2s = (0 until w2Arr.length()).map { i ->
             val o = w2Arr.getJSONObject(i)
@@ -88,6 +120,7 @@ class ReturnRepository(private val dao: ReturnDao) {
         )
         return TaxReturn(
             status = runCatching { FilingStatus.valueOf(status) }.getOrDefault(FilingStatus.SINGLE),
+            taxpayer = tp,
             w2s = w2s,
             scheduleC = sc,
             businessMiles = businessMiles,

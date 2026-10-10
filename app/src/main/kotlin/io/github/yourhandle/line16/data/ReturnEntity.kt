@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class ReturnEntity(
     @PrimaryKey val year: Int,
     val status: String,
+    val taxpayerJson: String,
     val w2Json: String,
     val scheduleCJson: String,
     val businessMiles: Int,
