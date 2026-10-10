@@ -1,1 +1,6 @@
 -keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
+-dontwarn com.gemalto.jp2.JP2Decoder
+-dontwarn com.gemalto.jp2.JP2Encoder
+-keep class com.tom_roush.pdfbox.filter.** { *; }
+-keep class com.tom_roush.pdfbox.pdmodel.interactive.form.** { *; }
