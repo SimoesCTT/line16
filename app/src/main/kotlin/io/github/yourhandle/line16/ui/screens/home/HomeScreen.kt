@@ -41,9 +41,11 @@ fun HomeScreen(vm: ReturnViewModel, onNavigate: (String) -> Unit) {
         }
         Button({ onNavigate(Routes.TAXPAYER) }, Modifier.fillMaxWidth()) { Text("Your information") }
         Button({ onNavigate(Routes.FILING_STATUS) }, Modifier.fillMaxWidth()) { Text("Filing status") }
+        Button({ onNavigate(Routes.DEPENDENTS) }, Modifier.fillMaxWidth()) { Text("Dependents") }
         Button({ onNavigate(Routes.W2) }, Modifier.fillMaxWidth()) { Text("W-2 income") }
         Button({ onNavigate(Routes.SCHEDULE_C) }, Modifier.fillMaxWidth()) { Text("Self-employment (Schedule C)") }
         Button({ onNavigate(Routes.SUMMARY) }, Modifier.fillMaxWidth()) { Text("View 1040 summary") }
+        OutlinedButton({ onNavigate(Routes.UPDATE) }, Modifier.fillMaxWidth()) { Text("Form updates") }
         OutlinedButton({ onNavigate(Routes.ABOUT) }, Modifier.fillMaxWidth()) { Text("About") }
     }
 }

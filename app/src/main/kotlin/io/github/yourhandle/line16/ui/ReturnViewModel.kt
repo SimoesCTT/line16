@@ -11,7 +11,7 @@ import io.github.yourhandle.line16.domain.model.FilingStatus
 import io.github.yourhandle.line16.domain.model.ScheduleC
 import io.github.yourhandle.line16.domain.model.TaxReturn
 import io.github.yourhandle.line16.domain.model.W2
-import io.github.yourhandle.line16.domain.year.TaxYear2026
+import io.github.yourhandle.line16.domain.year.TaxYear2025
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,12 +29,15 @@ class ReturnViewModel(app: Application) : AndroidViewModel(app) {
 
     init {
         viewModelScope.launch {
-            _return.value = repo.load(TaxYear2026.YEAR)
+            _return.value = repo.load(TaxYear2025.YEAR)
             recalc()
         }
     }
 
     fun setStatus(s: FilingStatus) = update { it.copy(status = s) }
+
+    fun setDependents(d: List<io.github.yourhandle.line16.domain.model.Dependent>) =
+        update { it.copy(dependents = d) }
 
     fun setTaxpayer(t: io.github.yourhandle.line16.domain.model.TaxpayerInfo) = update { it.copy(taxpayer = t) }
 
@@ -57,7 +60,7 @@ class ReturnViewModel(app: Application) : AndroidViewModel(app) {
         val next = f(_return.value)
         _return.value = next
         recalc()
-        viewModelScope.launch { repo.save(TaxYear2026.YEAR, next) }
+        viewModelScope.launch { repo.save(TaxYear2025.YEAR, next) }
     }
 
     private fun recalc() {

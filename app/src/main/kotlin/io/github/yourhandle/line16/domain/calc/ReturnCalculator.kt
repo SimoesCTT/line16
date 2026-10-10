@@ -12,6 +12,7 @@ data class TaxResult(
     val taxableIncome: Long,
     val federalIncomeTax: Long,
     val selfEmploymentTax: Long,
+    val childTaxCredit: Long,
     val totalTax: Long,
     val withholding: Long,
     val refundOrOwed: Long,
@@ -50,7 +51,8 @@ object ReturnCalculator {
             brackets = brackets,
         )
 
-        val totalTax = federalTax + se.total
+        val ctc = computeCtc(r, agi)
+        val totalTax = (federalTax + se.total - ctc).coerceAtLeast(0L)
         val withholding = r.totalWithholding
         val refundOrOwed = withholding - totalTax
 
@@ -66,6 +68,7 @@ object ReturnCalculator {
             add(LineItem("1040", "12", "Standard deduction", stdDeduction))
             add(LineItem("1040", "15", "Taxable income", taxableIncome))
             add(LineItem("1040", "16", "Federal income tax", federalTax))
+            if (ctc > 0) add(LineItem("1040", "19", "Child tax credit", ctc))
             if (se.total > 0) add(LineItem("Sch 2", "4", "Self-employment tax", se.total))
             add(LineItem("1040", "24", "Total tax", totalTax))
             add(LineItem("1040", "25a", "Federal withholding", withholding))
@@ -80,6 +83,7 @@ object ReturnCalculator {
             taxableIncome = taxableIncome,
             federalIncomeTax = federalTax,
             selfEmploymentTax = se.total,
+            childTaxCredit = ctc,
             totalTax = totalTax,
             withholding = withholding,
             refundOrOwed = refundOrOwed,
@@ -87,5 +91,23 @@ object ReturnCalculator {
             marginalRate = marginalRate,
             lines = lines,
         )
+    }
+
+    private fun computeCtc(r: TaxReturn, agi: Long): Long {
+        val qualifying = r.dependents.count { it.qualifiesForChildTaxCredit }
+        if (qualifying == 0) return 0L
+        var credit = qualifying * io.github.yourhandle.line16.domain.year.TaxYear2025.CTC_PER_CHILD
+        val threshold = when (r.status) {
+            io.github.yourhandle.line16.domain.model.FilingStatus.MFJ ->
+                io.github.yourhandle.line16.domain.year.TaxYear2025.CTC_PHASEOUT_START_MFJ
+            else ->
+                io.github.yourhandle.line16.domain.year.TaxYear2025.CTC_PHASEOUT_START_SINGLE
+        }
+        if (agi > threshold) {
+            val over = agi - threshold
+            val reduction = ((over + 999) / 1000) * 50
+            credit = (credit - reduction).coerceAtLeast(0L)
+        }
+        return credit
     }
 }

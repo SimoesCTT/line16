@@ -25,11 +25,13 @@ import androidx.navigation.compose.rememberNavController
 import io.github.yourhandle.line16.ui.ReturnViewModel
 import io.github.yourhandle.line16.ui.nav.Routes
 import io.github.yourhandle.line16.ui.screens.about.AboutScreen
+import io.github.yourhandle.line16.ui.screens.dependents.DependentsScreen
 import io.github.yourhandle.line16.ui.screens.filingstatus.FilingStatusScreen
 import io.github.yourhandle.line16.ui.screens.home.HomeScreen
 import io.github.yourhandle.line16.ui.screens.schedulec.ScheduleCScreen
 import io.github.yourhandle.line16.ui.screens.summary.SummaryScreen
 import io.github.yourhandle.line16.ui.screens.taxpayer.TaxpayerScreen
+import io.github.yourhandle.line16.ui.screens.update.UpdateScreen
 import io.github.yourhandle.line16.ui.screens.w2.W2Screen
 import io.github.yourhandle.line16.ui.theme.Line16Theme
 
@@ -56,11 +58,13 @@ private fun Line16Root() {
     val title = when (route) {
         Routes.HOME -> "Line 16"
         Routes.TAXPAYER -> "Your information"
+        Routes.DEPENDENTS -> "Dependents"
         Routes.FILING_STATUS -> "Filing status"
         Routes.W2 -> "W-2 income"
         Routes.SCHEDULE_C -> "Schedule C"
         Routes.SUMMARY -> "1040 summary"
         Routes.ABOUT -> "About"
+        Routes.UPDATE -> "Form updates"
         else -> "Line 16"
     }
 
@@ -88,11 +92,13 @@ private fun Line16Root() {
                 HomeScreen(vm) { dest -> nav.navigate(dest) }
             }
             composable(Routes.TAXPAYER) { TaxpayerScreen(vm) }
+            composable(Routes.DEPENDENTS) { DependentsScreen(vm) }
             composable(Routes.FILING_STATUS) { FilingStatusScreen(vm) }
             composable(Routes.W2) { W2Screen(vm) }
             composable(Routes.SCHEDULE_C) { ScheduleCScreen(vm) }
             composable(Routes.SUMMARY) { SummaryScreen(vm) }
             composable(Routes.ABOUT) { AboutScreen() }
+            composable(Routes.UPDATE) { UpdateScreen() }
         }
     }
 }

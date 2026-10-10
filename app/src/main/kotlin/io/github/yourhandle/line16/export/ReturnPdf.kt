@@ -55,7 +55,7 @@ object ReturnPdf {
     fun write(context: Context, taxReturn: TaxReturn, result: TaxResult): File {
         PDFBoxResourceLoader.init(context.applicationContext)
 
-        val assetStream = context.assets.open("f1040.pdf")
+        val assetStream = io.github.yourhandle.line16.data.forms.FormUpdater.openForm(context, io.github.yourhandle.line16.domain.year.TaxYear2025.YEAR)
         val document = PDDocument.load(assetStream)
         val form: PDAcroForm = document.documentCatalog.acroForm
 

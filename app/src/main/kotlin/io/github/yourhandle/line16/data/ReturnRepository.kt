@@ -23,6 +23,18 @@ class ReturnRepository(private val dao: ReturnDao) {
     private fun TaxReturn.toEntity(year: Int) = ReturnEntity(
         year = year,
         status = status.name,
+        dependentsJson = JSONArray().apply {
+            dependents.forEach { d ->
+                put(JSONObject().apply {
+                    put("firstName", d.firstName)
+                    put("lastName", d.lastName)
+                    put("ssn", d.ssn)
+                    put("relationship", d.relationship)
+                    put("qualifiesForChildTaxCredit", d.qualifiesForChildTaxCredit)
+                    put("livesWithYou", d.livesWithYou)
+                })
+            }
+        }.toString(),
         taxpayerJson = JSONObject().apply {
             put("firstName", taxpayer.firstName)
             put("middleInitial", taxpayer.middleInitial)
@@ -88,6 +100,18 @@ class ReturnRepository(private val dao: ReturnDao) {
             state = t.optString("state"),
             zip = t.optString("zip"),
         )
+        val depArr = JSONArray(dependentsJson)
+        val deps = (0 until depArr.length()).map { i ->
+            val d = depArr.getJSONObject(i)
+            io.github.yourhandle.line16.domain.model.Dependent(
+                firstName = d.optString("firstName"),
+                lastName = d.optString("lastName"),
+                ssn = d.optString("ssn"),
+                relationship = d.optString("relationship"),
+                qualifiesForChildTaxCredit = d.optBoolean("qualifiesForChildTaxCredit"),
+                livesWithYou = d.optBoolean("livesWithYou", true),
+            )
+        }
         val w2Arr = JSONArray(w2Json)
         val w2s = (0 until w2Arr.length()).map { i ->
             val o = w2Arr.getJSONObject(i)
@@ -121,6 +145,7 @@ class ReturnRepository(private val dao: ReturnDao) {
         return TaxReturn(
             status = runCatching { FilingStatus.valueOf(status) }.getOrDefault(FilingStatus.SINGLE),
             taxpayer = tp,
+            dependents = deps,
             w2s = w2s,
             scheduleC = sc,
             businessMiles = businessMiles,
